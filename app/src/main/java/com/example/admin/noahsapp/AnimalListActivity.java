@@ -1,5 +1,6 @@
 package com.example.admin.noahsapp;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -20,9 +21,12 @@ public class AnimalListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_animal_list);
 
         listView = findViewById( R.id.lvAnimalList );
-        String categorey = "";
+
+        Intent intent = getIntent();
+        String category = intent.getStringExtra("category");
+
         DatabaseHelper dbh = new DatabaseHelper( this );
-        List<Animal> animals = dbh.getAnimalbyCategory( categorey );
+        List<Animal> animals = dbh.getAnimalByCategory( category );
         AnimalListAdapter adapter =
                 new AnimalListAdapter( this, R.layout.custom_animal_list_item, animals );
         listView.setAdapter( adapter );
@@ -30,8 +34,6 @@ public class AnimalListActivity extends AppCompatActivity {
         listView.setOnItemClickListener( new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                TextView category = view.findViewById( R.id.tvCategory );
-
                 //Log.d(TAG, "onItemClick: " + category.getText().toString());
             }
         });

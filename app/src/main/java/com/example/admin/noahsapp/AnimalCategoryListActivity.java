@@ -1,5 +1,6 @@
 package com.example.admin.noahsapp;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -33,10 +34,16 @@ public class AnimalCategoryListActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 TextView category = view.findViewById( R.id.tvCategory );
-
+                choose( category.getText().toString() );
                 //Log.d(TAG, "onItemClick: " + category.getText().toString());
             }
         });
+    }
+
+    public void choose( String category ) {
+        Intent intent = new Intent( this, AnimalListActivity.class );
+        intent.putExtra( "category", category );
+        startActivity( intent );
     }
 }
 

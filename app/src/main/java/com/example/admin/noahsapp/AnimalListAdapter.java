@@ -34,15 +34,11 @@ public class AnimalListAdapter extends ArrayAdapter<Animal> {
 
         TextView commonCameTextView = view.findViewById( R.id.tvAnimalCommonName ); //not extending AppCompatActivity
         TextView scientificNameTextView = view.findViewById( R.id.tvAnimalScientificName );
-        TextView categoryTextView = view.findViewById( R.id.tvAnimalCategory );
-        TextView concernTextiew = view.findViewById( R.id.tvAnimalConcern );
 
         //set values to the binded views
         Animal animal = getItem( position );
         commonCameTextView.setText( animal.getCommonName() );
         scientificNameTextView.setText( animal.getScientificName() );
-        categoryTextView.setText( animal.getCategory() );
-        concernTextiew.setText( animal.getConservationStatus() );
 
         return view;
     }

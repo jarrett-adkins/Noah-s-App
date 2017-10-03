@@ -110,7 +110,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return values;
     }
 
-    public List<Animal> getAnimalbyCategory( String category ) {
+    public List<Animal> getAnimalByCategory( String category ) {
         List<Animal> animalList = new ArrayList<>();
 
         SQLiteDatabase db = this.getWritableDatabase();
@@ -120,11 +120,19 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         //loop through cursor, create person objects, add to list
         if( cursor.moveToFirst() ) {
             do {
+                Log.d(TAG, "getAnimalByCategory: " +
+                                cursor.getString(1) + " " +
+                                cursor.getString(2) + " " +
+                                cursor.getString(3) + " " +
+                                cursor.getString(4));
+                //'1' 'mammal' 'lion' 'Panthera leo'
+                //0    1       2       3        4
+
                 Animal a = new Animal(
-                        cursor.getString(0),
                         cursor.getString(1),
                         cursor.getString(2),
-                        cursor.getString(3));
+                        cursor.getString(3),
+                        cursor.getString(4));
 
                 animalList.add( a );
             } while ( cursor.moveToNext() );

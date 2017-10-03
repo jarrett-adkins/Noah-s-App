@@ -12,7 +12,7 @@
     <ImageView
         android:id="@+id/ivLogo"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="150dp"
         android:src="@drawable/zoo_logo"
         android:layout_marginBottom="30sp"
         android:scaleType="fitXY"/>
@@ -37,6 +37,7 @@
         android:layout_height="wrap_content"
         android:text="View Animals"
         android:layout_marginTop="30sp"
+        android:textSize="50sp"
         android:onClick="goToCategories"/>
 
 </LinearLayout>
