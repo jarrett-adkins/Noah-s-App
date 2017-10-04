@@ -19,7 +19,7 @@ import java.util.List;
 public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String TAG = "DBHelper";
-    private static final int DATABASE_VERSION = 3;
+    private static final int DATABASE_VERSION = 4;
 
     public static final String DATABASE_NAME = "Animals.db";
     public static final String TABLE_NAME = "Animals";
@@ -27,6 +27,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COLUMN_COMMON_NAME = "CommonName";
     public static final String COLUMN_SCIENTIFIC_NAME = "ScientificName";
     public static final String COLUMN_CONSERVATION_STATUS = "ConservationStatus";
+    public static final String COLUMN_IMAGE = "image";
 
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -63,13 +64,32 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 + ", " + COLUMN_SCIENTIFIC_NAME + ", " + COLUMN_CONSERVATION_STATUS + ") " +
                 "VALUES ('reptile', 'False gharial', 'Tomistoma schlegelii' , 'Vulnerable')";
 
+        String ADD_TRI = "INSERT INTO " + TABLE_NAME + " (" + COLUMN_CATEGORY + ", " + COLUMN_COMMON_NAME
+                + ", " + COLUMN_SCIENTIFIC_NAME + ", " + COLUMN_CONSERVATION_STATUS + ") " +
+                "VALUES ('reptile', 'Triceratops', 'Triceratops horridus' , 'Extinct')";
+
+        String ADD_GENTOO = "INSERT INTO " + TABLE_NAME + " (" + COLUMN_CATEGORY + ", " + COLUMN_COMMON_NAME
+                + ", " + COLUMN_SCIENTIFIC_NAME + ", " + COLUMN_CONSERVATION_STATUS + ") " +
+                "VALUES ('bird', 'Gentoo penguin', 'Pygoscelis papua' , 'Least Concern')";
+
+        String ADD_ALBATROSS= "INSERT INTO " + TABLE_NAME + " (" + COLUMN_CATEGORY + ", " + COLUMN_COMMON_NAME
+                + ", " + COLUMN_SCIENTIFIC_NAME + ", " + COLUMN_CONSERVATION_STATUS + ") " +
+                "VALUES ('bird', 'Shy albatross', 'Thalassarche cauta' , 'Least Concern')";
+
+        String ADD_PARA= "INSERT INTO " + TABLE_NAME + " (" + COLUMN_CATEGORY + ", " + COLUMN_COMMON_NAME
+                + ", " + COLUMN_SCIENTIFIC_NAME + ", " + COLUMN_CONSERVATION_STATUS + ") " +
+                "VALUES ('bird', 'Red-masked parakeet', 'Psittacara erythrogenys' , 'Near Threatened')";
+
         sqLiteDatabase.execSQL( CREATE_TABLE );
         sqLiteDatabase.execSQL( ADD_LION );
         sqLiteDatabase.execSQL( ADD_ANTEATER );
         sqLiteDatabase.execSQL( ADD_GORILLA );
         sqLiteDatabase.execSQL( ADD_TORTOISE );
         sqLiteDatabase.execSQL( ADD_CROC );
-                //*/
+        sqLiteDatabase.execSQL( ADD_TRI);
+        sqLiteDatabase.execSQL( ADD_GENTOO);
+        sqLiteDatabase.execSQL( ADD_ALBATROSS);
+        sqLiteDatabase.execSQL( ADD_PARA);
 
         Log.d(TAG, "onCreate: ");
     }
@@ -120,14 +140,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         //loop through cursor, create person objects, add to list
         if( cursor.moveToFirst() ) {
             do {
-                Log.d(TAG, "getAnimalByCategory: " +
-                                cursor.getString(1) + " " +
-                                cursor.getString(2) + " " +
-                                cursor.getString(3) + " " +
-                                cursor.getString(4));
-                //'1' 'mammal' 'lion' 'Panthera leo'
-                //0    1       2       3        4
-
                 Animal a = new Animal(
                         cursor.getString(1),
                         cursor.getString(2),

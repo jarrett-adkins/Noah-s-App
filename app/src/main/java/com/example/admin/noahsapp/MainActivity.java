@@ -29,4 +29,7 @@ X 3. Activity three: ListView with a list of all the animals in that category
      animal and play a sound of that animal.
 X 5. Save the data in a database using SQLite
 X 6. Use Cardviews
+
+for images
+https://github.com/hiteshbpatel/Android_Blog_Projects/tree/master/Android-SQLite-master/src/com/expr/sample/db
  */
