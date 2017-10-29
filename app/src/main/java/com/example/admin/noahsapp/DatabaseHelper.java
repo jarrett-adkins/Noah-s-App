@@ -5,21 +5,19 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.util.Log;
-import android.widget.Toast;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.List;
-
-/**
- * Created by Admin on 10/2/2017.
- */
 
 //auto increment
 public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String TAG = "DBHelper";
-    private static final int DATABASE_VERSION = 4;
+    private static final int DATABASE_VERSION = 8;
 
     public static final String DATABASE_NAME = "Animals.db";
     public static final String TABLE_NAME = "Animals";
@@ -28,10 +26,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COLUMN_SCIENTIFIC_NAME = "ScientificName";
     public static final String COLUMN_CONSERVATION_STATUS = "ConservationStatus";
     public static final String COLUMN_IMAGE = "image";
+    private static final String COLUMN_MP3 = "Mp3";
+
+    private Context context;
 
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
-
+        this.context = context;
         Log.d(TAG, "constructor: ");
     }
 
@@ -42,54 +43,136 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         //*
         String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME + "( Id INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 COLUMN_CATEGORY + " TEXT, " + COLUMN_COMMON_NAME + " TEXT, " + COLUMN_SCIENTIFIC_NAME
-                + " TEXT, " + COLUMN_CONSERVATION_STATUS + " TEXT)";
-
-        String ADD_LION = "INSERT INTO " + TABLE_NAME + " (" + COLUMN_CATEGORY + ", " + COLUMN_COMMON_NAME
-                + ", " + COLUMN_SCIENTIFIC_NAME + ", " + COLUMN_CONSERVATION_STATUS + ") " +
-                "VALUES ('mammal', 'Lion', 'Panthera leo', 'Vulnerable')";
-
-        String ADD_ANTEATER = "INSERT INTO " + TABLE_NAME + " (" + COLUMN_CATEGORY + ", " + COLUMN_COMMON_NAME
-                + ", " + COLUMN_SCIENTIFIC_NAME + ", " + COLUMN_CONSERVATION_STATUS + ") " +
-                "VALUES ('mammal', 'Giant Anteater', 'Myrmecophaga tridactyla', 'Vulnerable')";
-
-        String ADD_GORILLA = "INSERT INTO " + TABLE_NAME + " (" + COLUMN_CATEGORY + ", " + COLUMN_COMMON_NAME
-                + ", " + COLUMN_SCIENTIFIC_NAME + ", " + COLUMN_CONSERVATION_STATUS + ") " +
-                "VALUES ('mammal', 'Western Gorilla', 'Gorilla gorilla', 'Vulnerable')";
-
-        String ADD_TORTOISE = "INSERT INTO " + TABLE_NAME + " (" + COLUMN_CATEGORY + ", " + COLUMN_COMMON_NAME
-                + ", " + COLUMN_SCIENTIFIC_NAME + ", " + COLUMN_CONSERVATION_STATUS + ") " +
-                "VALUES ('reptile', 'Desert tortoise', 'Gopherus morafkai', 'Vulnerable')";
-
-        String ADD_CROC = "INSERT INTO " + TABLE_NAME + " (" + COLUMN_CATEGORY + ", " + COLUMN_COMMON_NAME
-                + ", " + COLUMN_SCIENTIFIC_NAME + ", " + COLUMN_CONSERVATION_STATUS + ") " +
-                "VALUES ('reptile', 'False gharial', 'Tomistoma schlegelii' , 'Vulnerable')";
-
-        String ADD_TRI = "INSERT INTO " + TABLE_NAME + " (" + COLUMN_CATEGORY + ", " + COLUMN_COMMON_NAME
-                + ", " + COLUMN_SCIENTIFIC_NAME + ", " + COLUMN_CONSERVATION_STATUS + ") " +
-                "VALUES ('reptile', 'Triceratops', 'Triceratops horridus' , 'Extinct')";
-
-        String ADD_GENTOO = "INSERT INTO " + TABLE_NAME + " (" + COLUMN_CATEGORY + ", " + COLUMN_COMMON_NAME
-                + ", " + COLUMN_SCIENTIFIC_NAME + ", " + COLUMN_CONSERVATION_STATUS + ") " +
-                "VALUES ('bird', 'Gentoo penguin', 'Pygoscelis papua' , 'Least Concern')";
-
-        String ADD_ALBATROSS= "INSERT INTO " + TABLE_NAME + " (" + COLUMN_CATEGORY + ", " + COLUMN_COMMON_NAME
-                + ", " + COLUMN_SCIENTIFIC_NAME + ", " + COLUMN_CONSERVATION_STATUS + ") " +
-                "VALUES ('bird', 'Shy albatross', 'Thalassarche cauta' , 'Least Concern')";
-
-        String ADD_PARA= "INSERT INTO " + TABLE_NAME + " (" + COLUMN_CATEGORY + ", " + COLUMN_COMMON_NAME
-                + ", " + COLUMN_SCIENTIFIC_NAME + ", " + COLUMN_CONSERVATION_STATUS + ") " +
-                "VALUES ('bird', 'Red-masked parakeet', 'Psittacara erythrogenys' , 'Near Threatened')";
+                + " TEXT, " + COLUMN_CONSERVATION_STATUS + " TEXT, " + COLUMN_IMAGE + " BLOB" +
+                ")";
 
         sqLiteDatabase.execSQL( CREATE_TABLE );
-        sqLiteDatabase.execSQL( ADD_LION );
-        sqLiteDatabase.execSQL( ADD_ANTEATER );
-        sqLiteDatabase.execSQL( ADD_GORILLA );
-        sqLiteDatabase.execSQL( ADD_TORTOISE );
-        sqLiteDatabase.execSQL( ADD_CROC );
-        sqLiteDatabase.execSQL( ADD_TRI);
-        sqLiteDatabase.execSQL( ADD_GENTOO);
-        sqLiteDatabase.execSQL( ADD_ALBATROSS);
-        sqLiteDatabase.execSQL( ADD_PARA);
+
+        Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(),
+                R.drawable.lion);
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 0, outputStream);
+        byte[] data = outputStream.toByteArray();
+
+        ContentValues contentValues = new ContentValues();
+        contentValues.put( COLUMN_CATEGORY, "mammal" );
+        contentValues.put( COLUMN_COMMON_NAME, "Lion" );
+        contentValues.put( COLUMN_SCIENTIFIC_NAME, "Panthera leo" );
+        contentValues.put( COLUMN_CONSERVATION_STATUS, "Vulnerable" );
+        contentValues.put( COLUMN_IMAGE, data );
+        sqLiteDatabase.insert(TABLE_NAME, null, contentValues);
+
+//        anteater
+        bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.anteater);
+        outputStream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 0, outputStream);
+        data = outputStream.toByteArray();
+
+        contentValues = new ContentValues();
+        contentValues.put( COLUMN_CATEGORY, "mammal" );
+        contentValues.put( COLUMN_COMMON_NAME, "Giant Anteater" );
+        contentValues.put( COLUMN_SCIENTIFIC_NAME, "Myrmecophaga tridactyla" );
+        contentValues.put( COLUMN_CONSERVATION_STATUS, "Vulnerable" );
+        contentValues.put( COLUMN_IMAGE, data );
+        sqLiteDatabase.insert(TABLE_NAME, null, contentValues);
+
+//        gorilla
+        bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.gorilla);
+        outputStream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 0, outputStream);
+        data = outputStream.toByteArray();
+
+        contentValues = new ContentValues();
+        contentValues.put( COLUMN_CATEGORY, "mammal" );
+        contentValues.put( COLUMN_COMMON_NAME, "Western Gorilla" );
+        contentValues.put( COLUMN_SCIENTIFIC_NAME, "Gorilla gorilla" );
+        contentValues.put( COLUMN_CONSERVATION_STATUS, "Vulnerable" );
+        contentValues.put( COLUMN_IMAGE, data );
+        sqLiteDatabase.insert(TABLE_NAME, null, contentValues);
+
+//        tortoise
+        bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.tortoise);
+        outputStream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 0, outputStream);
+        data = outputStream.toByteArray();
+
+        contentValues = new ContentValues();
+        contentValues.put( COLUMN_CATEGORY, "reptile" );
+        contentValues.put( COLUMN_COMMON_NAME, "Desert tortoise" );
+        contentValues.put( COLUMN_SCIENTIFIC_NAME, "Gopherus morafkai" );
+        contentValues.put( COLUMN_CONSERVATION_STATUS, "Vulnerable" );
+        contentValues.put( COLUMN_IMAGE, data );
+        sqLiteDatabase.insert(TABLE_NAME, null, contentValues);
+
+//        False gharia
+        bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.gharial);
+        outputStream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 0, outputStream);
+        data = outputStream.toByteArray();
+
+        contentValues = new ContentValues();
+        contentValues.put( COLUMN_CATEGORY, "reptile" );
+        contentValues.put( COLUMN_COMMON_NAME, "False gharial" );
+        contentValues.put( COLUMN_SCIENTIFIC_NAME, "Tomistoma schlegelii" );
+        contentValues.put( COLUMN_CONSERVATION_STATUS, "Vulnerable" );
+        contentValues.put( COLUMN_IMAGE, data );
+        sqLiteDatabase.insert(TABLE_NAME, null, contentValues);
+
+//        Triceratops
+        bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.triceatops);
+        outputStream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 0, outputStream);
+        data = outputStream.toByteArray();
+
+        contentValues = new ContentValues();
+        contentValues.put( COLUMN_CATEGORY, "reptile" );
+        contentValues.put( COLUMN_COMMON_NAME, "Triceratops" );
+        contentValues.put( COLUMN_SCIENTIFIC_NAME, "Triceratops horridus" );
+        contentValues.put( COLUMN_CONSERVATION_STATUS, "Extinct" );
+        contentValues.put( COLUMN_IMAGE, data );
+        sqLiteDatabase.insert(TABLE_NAME, null, contentValues);
+
+//        penguin
+        bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.penguine);
+        outputStream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 0, outputStream);
+        data = outputStream.toByteArray();
+
+        contentValues = new ContentValues();
+        contentValues.put( COLUMN_CATEGORY, "bird" );
+        contentValues.put( COLUMN_COMMON_NAME, "Gentoo penguin" );
+        contentValues.put( COLUMN_SCIENTIFIC_NAME, "Pygoscelis papua" );
+        contentValues.put( COLUMN_CONSERVATION_STATUS, "Least Concern" );
+        contentValues.put( COLUMN_IMAGE, data );
+        sqLiteDatabase.insert(TABLE_NAME, null, contentValues);
+
+//        albatross
+        bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.albatross);
+        outputStream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 0, outputStream);
+        data = outputStream.toByteArray();
+
+        contentValues = new ContentValues();
+        contentValues.put( COLUMN_CATEGORY, "bird" );
+        contentValues.put( COLUMN_COMMON_NAME, "Shy albatross" );
+        contentValues.put( COLUMN_SCIENTIFIC_NAME, "Thalassarche cauta" );
+        contentValues.put( COLUMN_CONSERVATION_STATUS, "Least Concern" );
+        contentValues.put( COLUMN_IMAGE, data );
+        sqLiteDatabase.insert(TABLE_NAME, null, contentValues);
+
+//        parakeet
+        bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.parkeet);
+        outputStream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 0, outputStream);
+        data = outputStream.toByteArray();
+
+        contentValues = new ContentValues();
+        contentValues.put( COLUMN_CATEGORY, "bird" );
+        contentValues.put( COLUMN_COMMON_NAME, "Red-masked parakeet" );
+        contentValues.put( COLUMN_SCIENTIFIC_NAME, "Psittacara erythrogenys" );
+        contentValues.put( COLUMN_CONSERVATION_STATUS, "Near Threatened" );
+        contentValues.put( COLUMN_IMAGE, data );
+        sqLiteDatabase.insert(TABLE_NAME, null, contentValues);
 
         Log.d(TAG, "onCreate: ");
     }
@@ -136,20 +219,49 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         String query = "SELECT * FROM " + TABLE_NAME + " WHERE CATEGORY=?";
         Cursor cursor = db.rawQuery( query, new String[] {category} );
+        Log.d(TAG, "getAnimalByCategory: " + cursor.getCount());
 
         //loop through cursor, create person objects, add to list
         if( cursor.moveToFirst() ) {
             do {
-                Animal a = new Animal(
-                        cursor.getString(1),
-                        cursor.getString(2),
-                        cursor.getString(3),
-                        cursor.getString(4));
+                try {
+                    Animal a = new Animal(
+                            cursor.getString(1),
+                            cursor.getString(2),
+                            cursor.getString(3),
+                            cursor.getString(4));
 
-                animalList.add( a );
+                    animalList.add(a);
+                    Log.d(TAG, "getAnimalByCategory: Added animal " + a.getCommonName());
+                } catch ( java.lang.IllegalStateException e ) {
+                    Log.e(TAG, "getAnimalByCategory: ", e);
+                }
             } while ( cursor.moveToNext() );
         }
 
         return animalList;
+    }
+
+    public Animal getAnimal( String name ){
+        SQLiteDatabase db = this.getWritableDatabase();
+        String query = "SELECT * FROM " + TABLE_NAME + " WHERE " + COLUMN_COMMON_NAME + "=?";
+        Cursor cursor = db.rawQuery( query, new String[] {name} );
+
+        Animal a = null;
+
+        if( cursor.moveToFirst() ) {
+
+            byte[] imgByte = cursor.getBlob( 5 );
+            Bitmap bitmap = BitmapFactory.decodeByteArray(imgByte, 0, imgByte.length);
+
+            a = new Animal(
+                    cursor.getString(1),
+                    cursor.getString(2),
+                    cursor.getString(3),
+                    cursor.getString(4),
+                    bitmap);
+        }
+
+        return a;
     }
 }

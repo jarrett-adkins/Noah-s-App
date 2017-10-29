@@ -20,6 +20,7 @@ public class MainActivity extends AppCompatActivity {
         startActivity( intent );
     }
 }
+// MainActivity > Animal Category > Animal List
 
 /*
 X 1. Activity one: Make a homepage for zoo information

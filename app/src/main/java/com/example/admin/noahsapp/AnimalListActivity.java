@@ -34,6 +34,10 @@ public class AnimalListActivity extends AppCompatActivity {
         listView.setOnItemClickListener( new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                TextView animal = view.findViewById( R.id.tvAnimalCommonName );
+                Intent intent = new Intent( AnimalListActivity.this, AnimalDetailActivity.class );
+                intent.putExtra( "animal", animal.getText().toString() );
+                startActivity( intent );
                 //Log.d(TAG, "onItemClick: " + category.getText().toString());
             }
         });

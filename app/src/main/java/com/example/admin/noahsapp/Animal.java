@@ -1,18 +1,25 @@
 package com.example.admin.noahsapp;
 
-/**
- * Created by Admin on 10/3/2017.
- */
+import android.graphics.Bitmap;
 
 public class Animal {
 
     private String category, commonName, scientificName, conservationStatus;
+    private Bitmap image;
 
     public Animal(String category, String commonName, String scientificName, String conservationStatus) {
         this.category = category;
         this.commonName = commonName;
         this.scientificName = scientificName;
         this.conservationStatus = conservationStatus;
+    }
+
+    public Animal(String category, String commonName, String scientificName, String conservationStatus, Bitmap image ) {
+        this.category = category;
+        this.commonName = commonName;
+        this.scientificName = scientificName;
+        this.conservationStatus = conservationStatus;
+        this.image = image;
     }
 
     public String getCategory() {
@@ -47,6 +54,14 @@ public class Animal {
 
     public void setConservationStatus(String conservationStatus) {
         this.conservationStatus = conservationStatus;
+    }
+
+    public Bitmap getImage() {
+        return image;
+    }
+
+    public void setImage(Bitmap image) {
+        this.image = image;
     }
 
     @Override
